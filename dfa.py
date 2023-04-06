@@ -18,9 +18,6 @@ def dfa(m, s):
     :return: true if s[-1] is in F, false otherwise
     :rtype: boolean
     
-    :raises TypeError: if m is not of the correct form listed
-    :raises TypeError: if s is not a string
-
     Example usage:
     import dfa
     delta = {("q0", "0"):"q0", ("q0", "1"):"q1",
@@ -32,3 +29,13 @@ def dfa(m, s):
     print(result) # prints False
 
     """
+    cur_state = m[3]
+    for cur_ltr in s:
+        cur_delta = (cur_state, cur_ltr)
+        if cur_delta not in m[2]:
+            return False
+        cur_state =  m[2][cur_delta]
+
+    if cur_state in m[4]:
+        return True
+    return False
