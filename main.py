@@ -5,4 +5,3 @@ result = dfa.dfa(m, "1101")
 print(result) # prints True
 result = dfa.dfa(m, "")
 print(result) # prints False
-
