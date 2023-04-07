@@ -2,32 +2,15 @@
 # CS254, Spring 2023
 
 import re
-# We talked a bit about Python regular expressions in class and in the reading handout. In this problem, you’ll
-# practice using these regular expressions to both find information in a string and change a string. All of your
-# answers to this problem should go in a single file named ps03_regex.py.
-
-
-# 1 and we’ll limit the local-part to be 54 characters or fewer. The domain can consist of upper or lower
-# case letters, any digits, hyphens (-), and periods. Like the local-part, the domain cannot start with a period.
-# Both the local-part and the domain must contain at least one character.
-# 
-# 2 Write a function get_all_emails
-# that takes a single string parameter and returns a list where each item is an email address in the string.
-# Here’s an example of me using mine:
-
-
 
  
 def get_all_emails(s):
     """
-    
     Parse a string and return a list where each item is an email address in the string.
     
     :param str s: string being parsed
     :return: list where each item is an email address in the string
     :rtype: [str]
-    
-    :raises TypeError: if s is not a string
 
     example usage
     >>> import ps03_regex
@@ -38,14 +21,35 @@ def get_all_emails(s):
     ['turtles@SEA-Turtle']
     >>> ps03_regex.get_all_emails('.turtles@.SEA-Turtle')
     """
+
+
+    #the local-part (before @) can consist of any upper or lowercase characters, any digits, and any of the following characters: !#$%&'*+-/=?ˆ_`{}|∼;. It can also have one or more periods (.) in it as long as it doesn’t start with the period
+
+    #The domain can consist of upper or lower case letters, any digits, hyphens (-), and periods. Like the local-part, the domain cannot start with a period.
+    return re.findall(r'(?!\.)[0-9a-zA-Z\!\#\$\%\'\*\+\-\/\=\?\^\_\`\{\}\|\~\;\.]{1,54}\@(?!\.)[0-9a-zA-Z\-\.]*',s)
     
+
+def obfuscate(s):
+    """
+    Rewrites the email into the domain name, followed by the words “preceded by @ and then preceded by ”, and then followed by the local-part.
+
+    :param str s: string being parsed
+    :return: the string with any emails which has been modified
+    :rtype: str
+
+    EXAMPLE usage:
+    >>> ps03_regex.obfuscate('Here is my email: turtles@SEA-Turtle')
+    'Here is my email: SEA-Turtle preceded by @ and then preceded by turtles'
+    >>> ps03_regex.obfuscate('eris email is eris@sleepycat, and YAY has email too: all.done+YAY@compl3t3')
+    'eris email is sleepycat preceded by @ and then preceded by eris, and YAY has email too: compl3t3 preceded by @ and then preceded by all.done+YAY'
+
+    """
+
+    emails = get_all_emails(s)#reuse get_all_email to get the list of emails
+    obfuscated = s
+    for email in emails:
+        addr_parts = email.split("@")
+        repl = addr_parts[1] + " preceded by @ and ten preceded by " + addr_parts[0] 
+        obfuscated = re.sub(re.escape(email), repl, obfuscated)
     
-    # (a) First, you’ll write a regular expression that can find email addresses in a string. Email addresses have a
-    # local-part and a domain. The local-part and the domain are separated by an @ symbol. For instance, in my
-    # email address, arafferty is the local part and carleton.edu is the domain. According to Wikipedia, the
-    # local-part can consist of any upper or lowercase characters, any digits, and any of the following characters:
-    # !#$%&'*+-/=?ˆ_`{}|∼;. It can also have one or more periods (.) in it as long as it doesn’t start with the
-    # period,
-    # regex = r’\d{1,2}\\\d{1,2}\\\d{2,4}’
-    print("hello world")
-    
+    return obfuscated
