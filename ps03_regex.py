@@ -49,7 +49,7 @@ def obfuscate(s):
     obfuscated = s
     for email in emails:
         addr_parts = email.split("@")
-        repl = addr_parts[1] + " preceded by @ and ten preceded by " + addr_parts[0] 
+        repl = addr_parts[1] + " preceded by @ and then preceded by " + addr_parts[0] 
         obfuscated = re.sub(re.escape(email), repl, obfuscated)
     
     return obfuscated
